@@ -18,6 +18,7 @@
     "SUI_NETWORK": "testnet",
     "SUI_FULLNODE_URL": "https://fullnode.testnet.sui.io:443",
     "NEXT_PUBLIC_SUI_FULLNODE_URL": "https://fullnode.testnet.sui.io:443",
+    "NEXT_PUBLIC_APP_URL": "https://suioverflow-instantrent.veithly.workers.dev",
     "NEXT_PRIVATE_MINIMAL_MODE": "1"
   }
 }
