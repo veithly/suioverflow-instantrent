@@ -152,7 +152,7 @@ export function RentConsole({ lease }: { lease: Lease }) {
 
         {topUpDigest ? (
           <a
-            href={`https://suivision.xyz/txblock/${topUpDigest}?network=testnet`}
+            href={`https://testnet.suivision.xyz/txblock/${topUpDigest}`}
             target="_blank"
             rel="noreferrer"
             className="mt-4 inline-block break-all text-xs text-accent underline"

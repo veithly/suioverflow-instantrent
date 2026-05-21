@@ -5,7 +5,7 @@
 *Renters top up when their invoices clear. Landlords sell future streams to a lender — instantly, in one PTB.*
 
 [![Live](https://img.shields.io/badge/Live-Open_app-22c55e?style=for-the-badge)](https://instantrent.vercel.app/app)
-[![Network](https://img.shields.io/badge/Network-Sui_Testnet-0891b2?style=for-the-badge)](https://suivision.xyz/?network=testnet)
+[![Network](https://img.shields.io/badge/Network-Sui_Testnet-0891b2?style=for-the-badge)](https://testnet.suivision.xyz)
 [![PTBs](https://img.shields.io/badge/Sell_window-One_PTB-f59e0b?style=for-the-badge)](#how-it-works)
 [![License](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)](./LICENSE)
 
