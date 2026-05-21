@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "suioverflow-instantrent",
+  "name": "instantrent",
   "main": ".open-next/worker.js",
   "compatibility_date": "2024-12-30",
   "compatibility_flags": [
@@ -18,7 +18,7 @@
     "SUI_NETWORK": "testnet",
     "SUI_FULLNODE_URL": "https://fullnode.testnet.sui.io:443",
     "NEXT_PUBLIC_SUI_FULLNODE_URL": "https://fullnode.testnet.sui.io:443",
-    "NEXT_PUBLIC_APP_URL": "https://suioverflow-instantrent.veithly.workers.dev",
+    "NEXT_PUBLIC_APP_URL": "https://instantrent.veithly.workers.dev",
     "NEXT_PRIVATE_MINIMAL_MODE": "1"
   }
 }

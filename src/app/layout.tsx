@@ -4,7 +4,7 @@ import "./globals.css";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ??
-  "https://suioverflow-instantrent.veithly.workers.dev";
+  "https://instantrent.veithly.workers.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
