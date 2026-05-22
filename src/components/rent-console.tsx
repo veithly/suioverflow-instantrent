@@ -8,6 +8,12 @@ import { useOptionalCurrentAccount, useOptionalDAppKit } from "@/lib/dapp-kit-sa
 import type { Lease } from "@/lib/streams";
 
 const TOP_UP_MIST = 200_000_000; // 0.2 SUI symbolic top-up
+const CLOCK_OBJECT_ID = "0x6";
+const MOVE_PACKAGE_ID = process.env.NEXT_PUBLIC_MOVE_PACKAGE_ID;
+
+function stringToBytes(value: string) {
+  return Array.from(new TextEncoder().encode(value));
+}
 
 export function RentConsole({ lease }: { lease: Lease }) {
   const account = useOptionalCurrentAccount();
@@ -41,9 +47,19 @@ export function RentConsole({ lease }: { lease: Lease }) {
       if (account?.address && dAppKit) {
         signerSource = "client";
         signerAddress = account.address;
+        if (!MOVE_PACKAGE_ID) {
+          throw new Error("NEXT_PUBLIC_MOVE_PACKAGE_ID is not configured");
+        }
         const tx = new Transaction();
-        const [coin] = tx.splitCoins(tx.gas, [TOP_UP_MIST]);
-        tx.transferObjects([coin], account.address);
+        tx.moveCall({
+          target: `${MOVE_PACKAGE_ID}::stream::top_up_demo`,
+          arguments: [
+            tx.pure.vector("u8", stringToBytes(lease.id)),
+            tx.pure.u64(24),
+            tx.pure.u64(TOP_UP_MIST),
+            tx.object(CLOCK_OBJECT_ID),
+          ],
+        });
         const result = await dAppKit.signAndExecuteTransaction({ transaction: tx });
         if (result.$kind !== "Transaction") {
           throw new Error(

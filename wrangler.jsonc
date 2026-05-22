@@ -19,6 +19,8 @@
     "SUI_FULLNODE_URL": "https://fullnode.testnet.sui.io:443",
     "NEXT_PUBLIC_SUI_FULLNODE_URL": "https://fullnode.testnet.sui.io:443",
     "NEXT_PUBLIC_APP_URL": "https://instantrent.veithly.workers.dev",
+    "NEXT_PUBLIC_MOVE_PACKAGE_ID": "0x70d1f8f201376560ac6fe72cb7767363bd78754b2476933cc0061bc68cd1e03f",
+    "MOVE_PACKAGE_ID": "0x70d1f8f201376560ac6fe72cb7767363bd78754b2476933cc0061bc68cd1e03f",
     "NEXT_PRIVATE_MINIMAL_MODE": "1"
   }
 }

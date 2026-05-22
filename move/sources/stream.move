@@ -1,50 +1,80 @@
 module instantrent_core::stream {
+    use std::string::{Self, String};
     use sui::event;
 
-    /// One rental cash-flow stream between tenant and landlord.
     public struct Lease has key, store {
         id: UID,
         landlord: address,
         tenant: address,
-        rate_mist_per_second: u64,
+        unit: String,
+        monthly_rent_usd: u64,
         funded_through_ms: u64,
-        started_at_ms: u64,
-        sold: bool,
+        created_at_ms: u64,
     }
 
-    public struct LeaseCreated has copy, drop { lease_id: ID, landlord: address, tenant: address }
-    public struct LeaseToppedUp has copy, drop { lease_id: ID, new_funded_through_ms: u64 }
-    public struct LeaseSold has copy, drop { lease_id: ID, lender: address, payout_mist: u64 }
+    public struct TopUpReceipt has key, store {
+        id: UID,
+        lease_id: String,
+        tenant: address,
+        hours: u64,
+        payment_mist: u64,
+        funded_at_ms: u64,
+    }
+
+    public struct LeaseCreated has copy, drop {
+        lease_id: ID,
+        landlord: address,
+        tenant: address,
+    }
+
+    public struct LeaseToppedUp has copy, drop {
+        receipt_id: ID,
+        tenant: address,
+        hours: u64,
+        payment_mist: u64,
+    }
 
     public entry fun start_lease(
         landlord: address,
-        tenant: address,
-        rate_mist_per_second: u64,
+        unit: vector<u8>,
+        monthly_rent_usd: u64,
+        initial_funded_through_ms: u64,
         clock: &sui::clock::Clock,
         ctx: &mut TxContext,
     ) {
-        let started = sui::clock::timestamp_ms(clock);
+        let tenant = tx_context::sender(ctx);
         let lease = Lease {
             id: object::new(ctx),
             landlord,
             tenant,
-            rate_mist_per_second,
-            funded_through_ms: started,
-            started_at_ms: started,
-            sold: false,
+            unit: string::utf8(unit),
+            monthly_rent_usd,
+            funded_through_ms: initial_funded_through_ms,
+            created_at_ms: sui::clock::timestamp_ms(clock),
         };
-        event::emit(LeaseCreated { lease_id: object::id(&lease), landlord, tenant });
-        transfer::share_object(lease);
+        let lease_id = object::id(&lease);
+        event::emit(LeaseCreated { lease_id, landlord, tenant });
+        transfer::public_transfer(lease, tenant);
     }
 
-    public entry fun top_up(lease: &mut Lease, extend_ms: u64) {
-        lease.funded_through_ms = lease.funded_through_ms + extend_ms;
-        event::emit(LeaseToppedUp { lease_id: object::id(lease), new_funded_through_ms: lease.funded_through_ms });
-    }
-
-    public entry fun sell_stream(lease: &mut Lease, lender: address, payout_mist: u64) {
-        assert!(!lease.sold, 0);
-        lease.sold = true;
-        event::emit(LeaseSold { lease_id: object::id(lease), lender, payout_mist });
+    public entry fun top_up_demo(
+        lease_id: vector<u8>,
+        hours: u64,
+        payment_mist: u64,
+        clock: &sui::clock::Clock,
+        ctx: &mut TxContext,
+    ) {
+        let tenant = tx_context::sender(ctx);
+        let receipt = TopUpReceipt {
+            id: object::new(ctx),
+            lease_id: string::utf8(lease_id),
+            tenant,
+            hours,
+            payment_mist,
+            funded_at_ms: sui::clock::timestamp_ms(clock),
+        };
+        let receipt_id = object::id(&receipt);
+        event::emit(LeaseToppedUp { receipt_id, tenant, hours, payment_mist });
+        transfer::public_transfer(receipt, tenant);
     }
 }
